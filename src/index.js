@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 
 const { PORT, REMINDER_BINDING_KEY } = require("./config/serverConfig");
 
-// const { sendBasicEmail } = require('./services/email-service');
+const EmailService = require("./services/email-service");
 const TicketController = require("./controllers/ticket-controller");
 
 const jobs = require("./utils/job");
@@ -16,13 +16,13 @@ const setupAndStartServer = async () => {
 
   app.post("/api/v1/tickets", TicketController.create);
 
-  //suscribing message
+  // suscribing message
   const channel = await createChannel();
-  subscribeMessage(channel, undefined, REMINDER_BINDING_KEY);
+  subscribeMessage(channel, EmailService, REMINDER_BINDING_KEY);
 
   app.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`);
-    jobs();
+    // jobs();
     // sendBasicEmail(
     //     'support@admin.com',
     //     'moviebookingappservice@gmail.com',

@@ -1,4 +1,5 @@
 const amqplib = require("amqplib");
+const { json } = require("sequelize");
 const { MESSAGE_BROKER_URL, EXCHANGE_NAME } = require("../config/serverConfig");
 
 const createChannel = async () => {
@@ -20,7 +21,14 @@ const subscribeMessage = async (channel, service, binding_key) => {
 
     channel.consume(applicationQueue.queue, (msg) => {
       console.log("received data");
-      console.log(msg.content.toString());
+      console.log(msg.content.toString()); //->this is fully in string
+      const payload = JSON.parse(msg.content.toString());
+      if (payload.service == "DEMO_SERVICE") {
+        //do something
+        console.log("Call for DEMO_SERVICE");
+        service.testingQueue(msg.content.toString());
+      }
+
       channel.ack(msg);
     });
   } catch (error) {
