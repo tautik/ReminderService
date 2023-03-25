@@ -22,13 +22,6 @@ const setupAndStartServer = async () => {
 
   app.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`);
-    // jobs();
-    // sendBasicEmail(
-    //     'support@admin.com',
-    //     'moviebookingappservice@gmail.com',
-    //     'This is a testing email',
-    //     'Hey, how are you, I hope you like the support'
-    // );
   });
 };
 

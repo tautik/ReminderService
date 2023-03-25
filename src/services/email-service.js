@@ -35,9 +35,6 @@ const updateTicket = async (ticketId, data) => {
   }
 };
 
-const testingQueue = async (data) => {
-  console.log("Inside Service Layer", data);
-};
 const createNotification = async (data) => {
   try {
     console.log(data);
@@ -48,12 +45,29 @@ const createNotification = async (data) => {
   }
 };
 
+const subscribeMessage = async (payload) => {
+  const data = payload.data;
+  const service = payload.service;
+
+  switch (service) {
+    case "CREATE_TICKET":
+      await createNotification(data);
+      break;
+    case "SEND_BASIC_MAIL":
+      await sendBasicEmail(data);
+      break;
+    default:
+      console.log("No valid event received ");
+      break;
+  }
+};
+
 module.exports = {
   sendBasicEmail,
   fetchPendingEmails,
   createNotification,
   updateTicket,
-  testingQueue,
+  subscribeMessage,
 };
 
 /**

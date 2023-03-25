@@ -18,17 +18,11 @@ const subscribeMessage = async (channel, service, binding_key) => {
     const applicationQueue = await channel.assertQueue("REMINDER_QUEUE");
 
     channel.bindQueue(applicationQueue.queue, EXCHANGE_NAME, binding_key);
-
     channel.consume(applicationQueue.queue, (msg) => {
       console.log("received data");
       console.log(msg.content.toString()); //->this is fully in string
       const payload = JSON.parse(msg.content.toString());
-      if (payload.service == "DEMO_SERVICE") {
-        //do something
-        console.log("Call for DEMO_SERVICE");
-        service.testingQueue(msg.content.toString());
-      }
-
+      service.subscribeMessage(payload);
       channel.ack(msg);
     });
   } catch (error) {
